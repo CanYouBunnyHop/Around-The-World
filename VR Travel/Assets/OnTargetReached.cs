@@ -9,6 +9,7 @@ public class OnTargetReached : MonoBehaviour
     public Transform target;
     public UnityEvent OnReached;
     private bool wasReached = false;
+
     private void FixedUpdate()
     {
         float distance = Vector3.Distance(transform.position, target.position);
@@ -18,7 +19,7 @@ public class OnTargetReached : MonoBehaviour
             OnReached.Invoke();
             wasReached = true;
         }
-        else if(distance >= threshold)
+        else if (distance >= threshold)
         {
             wasReached = false;
         }
