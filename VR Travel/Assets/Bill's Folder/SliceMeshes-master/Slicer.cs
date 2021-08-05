@@ -6,13 +6,17 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class Slicer : MonoBehaviour
 {
+    public GameObject swingCheck;
     public Material materialAfterSlice;
     public LayerMask sliceMask;
     public bool isTouched;
 
+    public float shortTime;
+
     private void Update()
     {
-        if (isTouched == true)
+        SwingCheck sc = swingCheck.GetComponent<SwingCheck>();
+        if (isTouched == true && sc.sliceReady)//&& sc.insideSliceable == false)
         {
             Collider[] newObjectsToBeSliced = Physics.OverlapBox(transform.position, new Vector3(1, 0.1f, 0.1f), transform.rotation, sliceMask);
 
@@ -29,8 +33,11 @@ public class Slicer : MonoBehaviour
                 MakeItPhysical(upperHullGameobject);
                 MakeItPhysical(lowerHullGameobject);
 
-                MakeItSliceable(upperHullGameobject);
-                MakeItSliceable(lowerHullGameobject);
+                //MakeItSliceable(upperHullGameobject); //Invoke("MakeItSliceable(upperHullGameobject)", 2f);
+                //MakeItSliceable(lowerHullGameobject); //Invoke("MakeItSliceable(lowerHullGameobject)", 2f);
+
+                StartCoroutine(MakeItSliceableDelay(upperHullGameobject));
+                StartCoroutine(MakeItSliceableDelay(lowerHullGameobject));
 
                 MakeItGrabable(upperHullGameobject);
                 MakeItGrabable(lowerHullGameobject);
@@ -48,8 +55,16 @@ public class Slicer : MonoBehaviour
         obj.AddComponent<Rigidbody>();
         obj.AddComponent<SlicedObject>();
     }
-    private void MakeItSliceable(GameObject obj)
+    
+   /* private void MakeItSliceable(GameObject obj)
     {
+        obj.layer = LayerMask.NameToLayer("Sliceable");
+    }*/
+
+    IEnumerator MakeItSliceableDelay(GameObject obj)
+    {
+        yield return new WaitForSeconds(shortTime);
+
         obj.layer = LayerMask.NameToLayer("Sliceable");
     }
     private void MakeItGrabable(GameObject obj)

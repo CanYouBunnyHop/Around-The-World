@@ -8,6 +8,7 @@ public class OnGrabSetTrigger : MonoBehaviour
     private BoxCollider boxcollider;
     private Rigidbody rb;
     public float minspeed;
+    public GameObject swingChecker;
 
     public void Awake()
     {
@@ -27,14 +28,21 @@ public class OnGrabSetTrigger : MonoBehaviour
         isGrabbed = false;
         rb.useGravity = true;
     }
-    public void FixedUpdate()
+    public void Update() // boxcollider manager
     {
-        if (isGrabbed ) //&& rb.velocity.magnitude > minspeed)
+        SwingCheck sc = swingChecker.GetComponent<SwingCheck>();
+        if (isGrabbed && sc.sliceReady)
         {
+            boxcollider.enabled = true;
             boxcollider.isTrigger = true;
         }
-        else
+        else if(isGrabbed && sc.sliceReady == false)
         {
+            boxcollider.enabled = false;
+        }
+        if(!isGrabbed)
+        {
+            boxcollider.enabled = true;
             boxcollider.isTrigger = false;
         }
     }
