@@ -9,7 +9,7 @@ public class SwingCheck : MonoBehaviour
   public float delayExitTime;
    public void OnTriggerEnter(Collider other)
     {
-        if(other != null)
+        if(other.gameObject.layer == 9)
         {
           StartCoroutine(DelayedTriggerEnter());
         }
@@ -20,13 +20,14 @@ public class SwingCheck : MonoBehaviour
     }
     IEnumerator DelayedTriggerEnter()
     {
+      sliceReady = true;
       yield return new WaitForSeconds(delayEnterTime);
       sliceReady = false;
     }
     IEnumerator DelayedTriggerExit()
     {
       yield return new WaitForSeconds(delayExitTime);
-      sliceReady = true;
+      sliceReady = false;
     }
 
 
